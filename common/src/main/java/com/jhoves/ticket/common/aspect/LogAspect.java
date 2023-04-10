@@ -1,4 +1,4 @@
-package com.jhoves.ticket.member.aspect;
+package com.jhoves.ticket.common.aspect;
 
 
 import cn.hutool.core.util.RandomUtil;
