@@ -1,0 +1,13 @@
+#测试获取总数的接口
+GET http://localhost:8000/member/member/count
+Accept: application/json
+
+###
+
+#测试注册接口
+POST http://localhost:8000/member/member/register
+Content-Type: application/x-www-form-urlencoded
+
+mobile=
+
+###
