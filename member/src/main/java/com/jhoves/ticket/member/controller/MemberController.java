@@ -43,7 +43,7 @@ public class MemberController {
 
     //登录接口
     @PostMapping("/login")
-    public CommonResp<MemberLoginResp> login(@Valid MemberLoginReq req) {
+    public CommonResp<MemberLoginResp> login(@Valid @RequestBody MemberLoginReq req) {
         MemberLoginResp resp = memberService.login(req);
         return new CommonResp<>(resp);
     }
