@@ -1,14 +1,16 @@
 package com.jhoves.ticket.member.controller;
 
 import com.jhoves.ticket.common.resp.CommonResp;
+import com.jhoves.ticket.member.req.MemberLoginReq;
 import com.jhoves.ticket.member.req.MemberRegisterReq;
+import com.jhoves.ticket.member.req.MemberSendCodeReq;
+import com.jhoves.ticket.member.resp.MemberLoginResp;
 import com.jhoves.ticket.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.awt.*;
 
 @RestController
 @RequestMapping("/member")
@@ -30,5 +32,19 @@ public class MemberController {
     public CommonResp<Long> register(@Valid MemberRegisterReq req){
         long registerId = memberService.register(req);
         return new CommonResp<>(registerId);
+    }
+
+    //发送验证码接口
+    @PostMapping("/send-code")
+    public CommonResp<String> sendCode(@Valid MemberSendCodeReq req){
+        memberService.sendCode(req);
+        return new CommonResp<>();
+    }
+
+    //登录接口
+    @PostMapping("/login")
+    public CommonResp<MemberLoginResp> login(@Valid MemberLoginReq req) {
+        MemberLoginResp resp = memberService.login(req);
+        return new CommonResp<>(resp);
     }
 }

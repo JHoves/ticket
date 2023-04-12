@@ -11,3 +11,18 @@ Content-Type: application/x-www-form-urlencoded
 mobile=12345864791
 
 ###
+
+#测试发送验证码的接口
+POST http://localhost:8000/member/member/send-code
+Content-Type: application/x-www-form-urlencoded
+
+mobile=123456
+###
+
+
+#测试登录的接口
+POST http://localhost:8000/member/member/login
+Content-Type: application/x-www-form-urlencoded
+
+mobile=13543183846&code=8888
+###
