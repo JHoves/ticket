@@ -14,9 +14,11 @@ mobile=12345864791
 
 #测试发送验证码的接口
 POST http://localhost:8000/member/member/send-code
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 
-mobile=123456
+{
+  "mobile":"13543183846"
+}
 ###
 
 

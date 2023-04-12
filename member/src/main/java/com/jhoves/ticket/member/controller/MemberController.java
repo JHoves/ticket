@@ -36,7 +36,7 @@ public class MemberController {
 
     //发送验证码接口
     @PostMapping("/send-code")
-    public CommonResp<String> sendCode(@Valid MemberSendCodeReq req){
+    public CommonResp<String> sendCode(@Valid @RequestBody MemberSendCodeReq req){
         memberService.sendCode(req);
         return new CommonResp<>();
     }
