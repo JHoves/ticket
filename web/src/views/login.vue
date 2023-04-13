@@ -1,7 +1,7 @@
 <template>
   <a-row class="login">
     <a-col :span="8" :offset="8" class="login-main">
-      <h1 style="text-align: center"><rocket-two-tone />&nbsp;鸿舱票务</h1>
+      <h1 style="text-align: center"><rocket-two-tone />&nbsp;梦问科技</h1>
       <a-form
               :model="loginForm"
               name="basic"
@@ -41,16 +41,19 @@
   import { defineComponent, reactive } from 'vue';
   import axios from 'axios';
   import { notification } from 'ant-design-vue'
+  import { useRouter } from 'vue-router'
+
   export default defineComponent({
     name:"login-view",
     setup() {
+      const router = useRouter();
       const loginForm = reactive({
         mobile: '13500000000',
         code:'',
       });
 
       const sendCode = () => {
-        axios.post("http://localhost:8000/member/member/send-code",{
+        axios.post("/member/member/send-code",{
           mobile: loginForm.mobile
         }).then(response => {
           let data = response.data;
@@ -64,10 +67,12 @@
       };
 
       const login = () => {
-        axios.post("http://localhost:8000/member/member/login",loginForm).then(response => {
+        axios.post("/member/member/login",loginForm).then(response => {
           let data = response.data;
           if(data.success){
             notification.success({ description: '登录成功！' });
+            //登录成功，跳转到控制台主页
+            router.push("/")
           }else{
             notification.error({ description: data.message });
           }
