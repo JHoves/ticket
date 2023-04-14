@@ -2,11 +2,10 @@ package com.jhoves.ticket.member.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.jhoves.ticket.common.exception.BusinessException;
 import com.jhoves.ticket.common.exception.BusinessExceptionEnum;
+import com.jhoves.ticket.common.util.JwtUtil;
 import com.jhoves.ticket.common.util.SnowUtil;
 import com.jhoves.ticket.member.domain.Member;
 import com.jhoves.ticket.member.domain.MemberExample;
@@ -16,7 +15,6 @@ import com.jhoves.ticket.member.req.MemberRegisterReq;
 import com.jhoves.ticket.member.req.MemberSendCodeReq;
 import com.jhoves.ticket.member.resp.MemberLoginResp;
 import jakarta.annotation.Resource;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -94,7 +92,12 @@ public class MemberService {
             throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_CODE_ERROR);
         }
 
-        return BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        //使用JWT实现单点登录
+        String token = JwtUtil.createToken(memberLoginResp.getId(),memberLoginResp.getMobile());
+        memberLoginResp.setToken(token);
+        return memberLoginResp;
+
     }
 
     private Member selectByMobile(String mobile) {
