@@ -73,7 +73,7 @@
           if(data.success){
             notification.success({ description: '登录成功！' });
             //登录成功，跳转到控制台主页
-            router.push("/");
+            router.push("/welcome");
             store.commit("setMember",data.content);
           }else{
             notification.error({ description: data.message });
