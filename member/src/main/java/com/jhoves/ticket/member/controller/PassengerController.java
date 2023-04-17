@@ -24,6 +24,7 @@ public class PassengerController {
         return new CommonResp<>();
     }
 
+    //只能查询到当前用户所添加的乘车人信息
     @GetMapping("/query-list")
     public CommonResp<PageResp<PassengerQueryResp>> queryList(@Valid PassengerQueryReq req) {
         req.setMemberId(LoginMemberContext.getId());
