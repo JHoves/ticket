@@ -1,10 +1,11 @@
 #测试登录的接口
-POST http://localhost:8001/member/passenger/save
+POST http://localhost:8000/member/passenger/save
 Content-Type: application/json
+token: {{token}}
 
 {
-  "memberId": "1",
-  "name": "test",
+  "memberId": "2",
+  "name": "test1",
   "idCard": "123321",
   "type": "1"
 }
