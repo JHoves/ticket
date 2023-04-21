@@ -30,15 +30,18 @@ public class PassengerService {
     @Resource
     private PassengerMapper passengerMapper;
 
+    //这个接口根据id是否为空来辨别是保存还是更新
     public void save(PassengerSaveReq req) {
         DateTime now = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
+        //如果id是空，则是保存
         if (ObjectUtil.isNull(passenger.getId())) {
             passenger.setMemberId(LoginMemberContext.getId());
             passenger.setId(SnowUtil.getSnowflakeNextId());
             passenger.setCreateTime(now);
             passenger.setUpdateTime(now);
             passengerMapper.insert(passenger);
+            //如果不为空，则更新
         } else {
             passenger.setUpdateTime(now);
             passengerMapper.updateByPrimaryKey(passenger);
@@ -55,6 +58,7 @@ public class PassengerService {
 
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
+
         PageHelper.startPage(req.getPage(), req.getSize());
         List<Passenger> passengerList = passengerMapper.selectByExample(passengerExample);
 
