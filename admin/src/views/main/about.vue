@@ -1,5 +1,5 @@
 <template>
-  <h1>欢迎使用梦问票务</h1>
+  <h1>关于梦问票务</h1>
 </template>
 <script>
 import { defineComponent } from 'vue';
