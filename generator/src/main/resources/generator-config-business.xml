@@ -12,7 +12,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
         <!-- 生成的实体类添加toString()方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
@@ -29,19 +29,29 @@
         </jdbcConnection>
 
         <!-- domain类的位置 targetProject是相对pom.xml的路径-->
-        <javaModelGenerator targetProject="..\member\src\main\java"
-                            targetPackage="com.jhoves.ticket.member.domain"/>
+        <javaModelGenerator targetProject="../business/src/main/java"
+                            targetPackage="com.jhoves.ticket.business.domain"/>
 
         <!-- mapper xml的位置 targetProject是相对pom.xml的路径 -->
-        <sqlMapGenerator targetProject="..\member\src\main\resources"
+        <sqlMapGenerator targetProject="../business/src/main/resources"
                          targetPackage="mapper"/>
 
         <!-- mapper类的位置 targetProject是相对pom.xml的路径 -->
-        <javaClientGenerator targetProject="..\member\src\main\java"
-                             targetPackage="com.jhoves.ticket.member.mapper"
+        <javaClientGenerator targetProject="../business/src/main/java"
+                             targetPackage="com.jhoves.ticket.business.mapper"
                              type="XMLMAPPER"/>
 
-        <table tableName="member" domainObjectName="Member"/>
-<!--        <table tableName="passenger" domainObjectName="Passenger"/>-->
+        <!--<table tableName="station" domainObjectName="Station"/>-->
+        <!--<table tableName="train" domainObjectName="Train"/>-->
+        <!--<table tableName="train_station" domainObjectName="TrainStation"/>-->
+        <!--<table tableName="train_carriage" domainObjectName="TrainCarriage"/>-->
+        <!--<table tableName="train_seat" domainObjectName="TrainSeat"/>-->
+        <!--<table tableName="daily_train" domainObjectName="DailyTrain"/>-->
+        <!--<table tableName="daily_train_station" domainObjectName="DailyTrainStation"/>-->
+        <!--<table tableName="daily_train_carriage" domainObjectName="DailyTrainCarriage"/>-->
+        <!--<table tableName="daily_train_seat" domainObjectName="DailyTrainSeat"/>-->
+        <!--<table tableName="daily_train_ticket" domainObjectName="DailyTrainTicket"/>-->
+        <!--<table tableName="confirm_order" domainObjectName="ConfirmOrder"/>-->
+        <table tableName="business" domainObjectName="Business"/>
     </context>
 </generatorConfiguration>
