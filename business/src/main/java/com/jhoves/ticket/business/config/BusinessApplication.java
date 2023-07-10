@@ -1,4 +1,4 @@
-package com.jhoves.ticket.member.config;
+package com.jhoves.ticket.business.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -11,12 +11,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @SpringBootApplication
 @ComponentScan("com.jhoves")
 @MapperScan("com.jhoves.ticket.*.mapper")
-public class MemberApplication {
+public class BusinessApplication {
     //增加日志
-    private static final Logger LOG = LoggerFactory.getLogger(MemberApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BusinessApplication.class);
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(MemberApplication.class);
+        SpringApplication app = new SpringApplication(BusinessApplication.class);
         ConfigurableEnvironment env = app.run(args).getEnvironment();
         LOG.info("启动成功！！");
         LOG.info("地址：\thttp://127.0.0.1:{}",env.getProperty("server.port"));

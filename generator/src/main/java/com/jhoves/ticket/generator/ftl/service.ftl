@@ -1,4 +1,4 @@
-package com.jhoves.ticket.member.service;
+package com.jhoves.ticket.${module}.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
@@ -7,12 +7,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jhoves.ticket.common.resp.PageResp;
 import com.jhoves.ticket.common.util.SnowUtil;
-import com.jhoves.ticket.member.domain.${Domain};
-import com.jhoves.ticket.member.domain.${Domain}Example;
-import com.jhoves.ticket.member.mapper.${Domain}Mapper;
-import com.jhoves.ticket.member.req.${Domain}QueryReq;
-import com.jhoves.ticket.member.req.${Domain}SaveReq;
-import com.jhoves.ticket.member.resp.${Domain}QueryResp;
+import com.jhoves.ticket.${module}.domain.${Domain};
+import com.jhoves.ticket.${module}.domain.${Domain}Example;
+import com.jhoves.ticket.${module}.mapper.${Domain}Mapper;
+import com.jhoves.ticket.${module}.req.${Domain}QueryReq;
+import com.jhoves.ticket.${module}.req.${Domain}SaveReq;
+import com.jhoves.ticket.${module}.resp.${Domain}QueryResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

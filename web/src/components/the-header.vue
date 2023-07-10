@@ -1,7 +1,7 @@
 <template>
   <a-layout-header class="header">
     <div class="logo">
-      <router-link to="/welcome" style="color: white; font-size: 25px">
+      <router-link to="/welcome" style="color: white; font-size: 20px">
         梦问票务
       </router-link>
     </div>

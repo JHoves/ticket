@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>member</artifactId>
+    <artifactId>business</artifactId>
 
     <dependencies>
         <dependency>
@@ -44,8 +44,8 @@
                 <!--修改版本-->
                 <version>3.1.0</version>
             </plugin>
+
         </plugins>
     </build>
-
 
 </project>

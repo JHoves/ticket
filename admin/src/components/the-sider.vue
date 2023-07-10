@@ -10,6 +10,11 @@
                     <coffee-outlined /> &nbsp; 欢迎
                 </router-link>
             </a-menu-item>
+            <a-menu-item key="/station">
+                <router-link to="/station">
+                    <user-outlined /> &nbsp; 站台管理
+                </router-link>
+            </a-menu-item>
             <a-menu-item key="/about">
                 <router-link to="/about">
                     <user-outlined /> &nbsp; 关于
