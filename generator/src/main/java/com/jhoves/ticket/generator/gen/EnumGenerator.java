@@ -2,6 +2,7 @@ package com.jhoves.ticket.generator.gen;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.jhoves.ticket.business.enums.SeatTypeEnum;
 import com.jhoves.ticket.business.enums.TrainTypeEnum;
 import com.jhoves.ticket.member.enums.PassengerTypeEnum;
 
@@ -25,7 +26,7 @@ public class EnumGenerator {
         try {
             toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
             toJson(TrainTypeEnum.class, bufferObject, bufferArray);
-//            toJson(SeatTypeEnum.class, bufferObject, bufferArray);
+            toJson(SeatTypeEnum.class, bufferObject, bufferArray);
 //            toJson(SeatColEnum.class, bufferObject, bufferArray);
 //            toJson(ConfirmOrderStatusEnum.class, bufferObject, bufferArray);
 
