@@ -12,7 +12,12 @@
             </a-menu-item>
             <a-menu-item key="/station">
                 <router-link to="/station">
-                    <user-outlined /> &nbsp; 站台管理
+                    <user-outlined /> &nbsp; 车站管理
+                </router-link>
+            </a-menu-item>
+            <a-menu-item key="/train">
+                <router-link to="/train">
+                    <user-outlined /> &nbsp; 火车管理
                 </router-link>
             </a-menu-item>
             <a-menu-item key="/about">
