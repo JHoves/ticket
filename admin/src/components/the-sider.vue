@@ -20,6 +20,11 @@
                     <user-outlined /> &nbsp; 火车管理
                 </router-link>
             </a-menu-item>
+            <a-menu-item key="/train-station">
+                <router-link to="/train-station">
+                    <user-outlined /> &nbsp; 火车车站
+                </router-link>
+            </a-menu-item>
             <a-menu-item key="/about">
                 <router-link to="/about">
                     <user-outlined /> &nbsp; 关于
