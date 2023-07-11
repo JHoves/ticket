@@ -93,8 +93,12 @@ export default defineComponent({
       if (Tool.isNotEmpty(station.value.name)) {
         station.value.namePinyin = pinyin(station.value.name, { toneType: 'none'}).replaceAll(" ", "");
         station.value.namePy = pinyin(station.value.name, { pattern: 'first',toneType: 'none'}).replaceAll(" ", "");
+      }else {
+        station.value.namePinyin = "";
+        station.value.namePy = "";
+
       }
-    }, {immediate: true})
+    }, {immediate: true});
 
     const onAdd = () => {
       station.value = {};
