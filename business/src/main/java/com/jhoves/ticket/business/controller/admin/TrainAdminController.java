@@ -1,6 +1,5 @@
 package com.jhoves.ticket.business.controller.admin;
 
-import com.jhoves.ticket.common.context.LoginMemberContext;
 import com.jhoves.ticket.common.resp.CommonResp;
 import com.jhoves.ticket.common.resp.PageResp;
 import com.jhoves.ticket.business.req.TrainQueryReq;
@@ -10,6 +9,8 @@ import com.jhoves.ticket.business.service.TrainService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/train")
@@ -27,6 +28,12 @@ public class TrainAdminController {
     @GetMapping("/query-list")
     public CommonResp<PageResp<TrainQueryResp>> queryList(@Valid TrainQueryReq req) {
         PageResp<TrainQueryResp> list = trainService.queryList(req);
+        return new CommonResp<>(list);
+    }
+
+    @GetMapping("/query-all")
+    public CommonResp<List<TrainQueryResp>> queryAll() {
+        List<TrainQueryResp> list = trainService.queryAll();
         return new CommonResp<>(list);
     }
 
