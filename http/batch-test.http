@@ -1,0 +1,10 @@
+GET http://localhost:8003/batch/test
+Accept: application/json
+
+###
+
+GET http://localhost:8000/batch/test
+Accept: application/json
+
+###
+
