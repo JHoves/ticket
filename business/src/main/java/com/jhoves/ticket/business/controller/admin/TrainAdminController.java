@@ -1,5 +1,6 @@
 package com.jhoves.ticket.business.controller.admin;
 
+import com.jhoves.ticket.business.service.TrainSeatService;
 import com.jhoves.ticket.common.resp.CommonResp;
 import com.jhoves.ticket.common.resp.PageResp;
 import com.jhoves.ticket.business.req.TrainQueryReq;
@@ -18,6 +19,9 @@ public class TrainAdminController {
 
     @Resource
     private TrainService trainService;
+
+    @Resource
+    private TrainSeatService trainSeatService;
 
     @PostMapping("/save")
     public CommonResp<Object> save(@Valid @RequestBody TrainSaveReq req) {
@@ -43,4 +47,9 @@ public class TrainAdminController {
         return new CommonResp<>();
     }
 
+    @GetMapping("/gen-seat/{trainCode}")
+    public CommonResp<Object> genSeat(@PathVariable String trainCode) {
+        trainSeatService.genTrainSeat(trainCode);
+        return new CommonResp<>();
+    }
 }

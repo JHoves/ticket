@@ -10,6 +10,11 @@
                     <coffee-outlined /> &nbsp; 欢迎
                 </router-link>
             </a-menu-item>
+            <a-menu-item key="/about">
+                <router-link to="/about">
+                    <user-outlined /> &nbsp; 关于
+                </router-link>
+            </a-menu-item>
             <a-menu-item key="/station">
                 <router-link to="/station">
                     <user-outlined /> &nbsp; 车站管理
@@ -33,11 +38,6 @@
             <a-menu-item key="/train-seat">
                 <router-link to="/train-seat">
                     <user-outlined /> &nbsp; 火车座位
-                </router-link>
-            </a-menu-item>
-            <a-menu-item key="/about">
-                <router-link to="/about">
-                    <user-outlined /> &nbsp; 关于
                 </router-link>
             </a-menu-item>
         </a-menu>
