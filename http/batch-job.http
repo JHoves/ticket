@@ -60,6 +60,8 @@ POST http://localhost:8000/batch/admin/job/run
 Content-Type: application/json
 
 {
-"name": "com.jhoves.ticket.batch.job.DailyticketJob",
+"name": "com.jhoves.ticket.batch.job.DailyTrainJob",
 "jobGroupName": "default"
 }
+
+###
