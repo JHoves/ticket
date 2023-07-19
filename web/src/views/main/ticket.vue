@@ -1,7 +1,6 @@
 <template>
     <p>
         <a-space>
-            <train-select v-model="params.trainCode" width="200px"></train-select>
             <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期"></a-date-picker>
             <station-select v-model="params.start" width="200px"></station-select>
             <station-select v-model="params.end" width="200px"></station-select>
@@ -15,6 +14,7 @@
              :loading="loading">
         <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex === 'operation'">
+                <a-button type="primary" @click="toOrder(record)">预定</a-button>
             </template>
             <template v-else-if="column.dataIndex === 'station'">
                 {{record.start}}<br/>
@@ -77,13 +77,13 @@
     import {defineComponent, ref, onMounted} from 'vue';
     import {notification} from "ant-design-vue";
     import axios from "axios";
-    import TrainSelect from "@/components/train-select";
     import StationSelect from "@/components/station-select";
     import dayjs from "dayjs";
+    import router from "@/router";
 
     export default defineComponent({
         name: "ticket-view",
-        components: {StationSelect, TrainSelect},
+        components: {StationSelect},
         setup() {
             const visible = ref(false);
             let dailyTrainTicket = ref({
@@ -120,11 +120,6 @@
             const params = ref({});
             const columns = [
                 {
-                    title: '日期',
-                    dataIndex: 'date',
-                    key: 'date',
-                },
-                {
                     title: '车次编号',
                     dataIndex: 'trainCode',
                     key: 'trainCode',
@@ -140,96 +135,54 @@
                     title: '历时',
                     dataIndex: 'duration',
                 },
-                // {
-                //   title: '出发站',
-                //   dataIndex: 'start',
-                //   key: 'start',
-                // },
-                // {
-                //   title: '出发站拼音',
-                //   dataIndex: 'startPinyin',
-                //   key: 'startPinyin',
-                // },
-                // {
-                //   title: '出发时间',
-                //   dataIndex: 'startTime',
-                //   key: 'startTime',
-                // },
-                // {
-                //   title: '出发站序',
-                //   dataIndex: 'startIndex',
-                //   key: 'startIndex',
-                // },
-                // {
-                //   title: '到达站',
-                //   dataIndex: 'end',
-                //   key: 'end',
-                // },
-                // {
-                //   title: '到达站拼音',
-                //   dataIndex: 'endPinyin',
-                //   key: 'endPinyin',
-                // },
-                // {
-                //   title: '到站时间',
-                //   dataIndex: 'endTime',
-                //   key: 'endTime',
-                // },
-                // {
-                //   title: '到站站序',
-                //   dataIndex: 'endIndex',
-                //   key: 'endIndex',
-                // },
                 {
                     title: '一等座',
                     dataIndex: 'ydz',
                     key: 'ydz',
                 },
-                // {
-                //   title: '一等座票价',
-                //   dataIndex: 'ydzPrice',
-                //   key: 'ydzPrice',
-                // },
                 {
                     title: '二等座',
                     dataIndex: 'edz',
                     key: 'edz',
                 },
-                // {
-                //   title: '二等座票价',
-                //   dataIndex: 'edzPrice',
-                //   key: 'edzPrice',
-                // },
                 {
                     title: '软卧',
                     dataIndex: 'rw',
                     key: 'rw',
                 },
-                // {
-                //   title: '软卧票价',
-                //   dataIndex: 'rwPrice',
-                //   key: 'rwPrice',
-                // },
                 {
                     title: '硬卧',
                     dataIndex: 'yw',
                     key: 'yw',
                 },
-                // {
-                //   title: '硬卧票价',
-                //   dataIndex: 'ywPrice',
-                //   key: 'ywPrice',
-                // },
+                {
+                    title: '操作',
+                    dataIndex: 'operation',
+                },
             ];
 
 
             const handleQuery = (param) => {
+                if (Tool.isEmpty(params.value.date)) {
+                    notification.error({description: "请输入日期"});
+                    return;
+                }
+                if (Tool.isEmpty(params.value.start)) {
+                    notification.error({description: "请输入出发地"});
+                    return;
+                }
+                if (Tool.isEmpty(params.value.end)) {
+                    notification.error({description: "请输入目的地"});
+                    return;
+                }
                 if (!param) {
                     param = {
                         page: 1,
                         size: pagination.value.pageSize
                     };
                 }
+                // 保存查询参数
+                SessionStorage.set(SESSION_TICKET_PARAMS, params.value)
                 loading.value = true;
                 axios.get("/business/daily-train-ticket/query-list", {
                     params: {
@@ -269,11 +222,23 @@
             };
 
             onMounted(() => {
-                handleQuery({
-                    page: 1,
-                    size: pagination.value.pageSize
-                });
+                //  "|| {}"是常用技巧，可以避免空指针异常
+                params.value = SessionStorage.get(SESSION_TICKET_PARAMS) || {};
+                if (Tool.isNotEmpty(params.value)) {
+                    handleQuery({
+                        page: 1,
+                        size: pagination.value.pageSize
+                    });
+                }
             });
+
+            const toOrder = (record) => {
+                dailyTrainTicket.value = Tool.copy(record);
+                SessionStorage.set(SESSION_ORDER, dailyTrainTicket.value);
+                router.push("/order");
+            };
+
+
 
             return {
                 dailyTrainTicket,
@@ -286,6 +251,7 @@
                 loading,
                 params,
                 calDuration,
+                toOrder
             };
         },
     });
