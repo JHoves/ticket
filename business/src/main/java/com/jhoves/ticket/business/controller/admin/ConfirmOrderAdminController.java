@@ -1,10 +1,9 @@
 package com.jhoves.ticket.business.controller.admin;
 
-import com.jhoves.ticket.common.context.LoginMemberContext;
+import com.jhoves.ticket.business.req.ConfirmOrderDoReq;
 import com.jhoves.ticket.common.resp.CommonResp;
 import com.jhoves.ticket.common.resp.PageResp;
 import com.jhoves.ticket.business.req.ConfirmOrderQueryReq;
-import com.jhoves.ticket.business.req.ConfirmOrderSaveReq;
 import com.jhoves.ticket.business.resp.ConfirmOrderQueryResp;
 import com.jhoves.ticket.business.service.ConfirmOrderService;
 import jakarta.annotation.Resource;
@@ -19,7 +18,7 @@ public class ConfirmOrderAdminController {
     private ConfirmOrderService confirmOrderService;
 
     @PostMapping("/save")
-    public CommonResp<Object> save(@Valid @RequestBody ConfirmOrderSaveReq req) {
+    public CommonResp<Object> save(@Valid @RequestBody ConfirmOrderDoReq req) {
         confirmOrderService.save(req);
         return new CommonResp<>();
     }

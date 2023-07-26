@@ -3,21 +3,26 @@ package com.jhoves.ticket.business.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jhoves.ticket.business.domain.DailyTrainTicket;
+import com.jhoves.ticket.business.enums.ConfirmOrderStatusEnum;
+import com.jhoves.ticket.business.req.ConfirmOrderDoReq;
+import com.jhoves.ticket.common.context.LoginMemberContext;
 import com.jhoves.ticket.common.resp.PageResp;
 import com.jhoves.ticket.common.util.SnowUtil;
 import com.jhoves.ticket.business.domain.ConfirmOrder;
 import com.jhoves.ticket.business.domain.ConfirmOrderExample;
 import com.jhoves.ticket.business.mapper.ConfirmOrderMapper;
 import com.jhoves.ticket.business.req.ConfirmOrderQueryReq;
-import com.jhoves.ticket.business.req.ConfirmOrderSaveReq;
 import com.jhoves.ticket.business.resp.ConfirmOrderQueryResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -29,8 +34,12 @@ public class ConfirmOrderService {
     @Resource
     private ConfirmOrderMapper confirmOrderMapper;
 
-    //这个接口根据id是否为空来辨别是保存还是更新
-    public void save(ConfirmOrderSaveReq req) {
+    @Resource
+    private DailyTrainTicketService dailyTrainTicketService;
+
+
+    //个接口根据id是否为空来辨别是保存还是更新
+    public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
         ConfirmOrder confirmOrder = BeanUtil.copyProperties(req, ConfirmOrder.class);
         //如果id是空，则是保存
@@ -71,5 +80,46 @@ public class ConfirmOrderService {
 
     public void delete(Long id) {
         confirmOrderMapper.deleteByPrimaryKey(id);
+    }
+
+    public void doConfirm(ConfirmOrderDoReq req) {
+        //省略业务数据校验，如：车次是否存在，余票是否存在，车次是否在有效期内，tickets条数>0，同乘客同车次是否已买过
+
+        //保存确认订单表，状态初始
+        DateTime now = DateTime.now();
+        Date date = req.getDate();
+        String trainCode = req.getTrainCode();
+        String start = req.getStart();
+        String end = req.getEnd();
+        ConfirmOrder confirmOrder = new ConfirmOrder();
+        confirmOrder.setId(SnowUtil.getSnowflakeNextId());
+        confirmOrder.setCreateTime(now);
+        confirmOrder.setUpdateTime(now);
+        confirmOrder.setMemberId(LoginMemberContext.getId());
+        confirmOrder.setDate(date);
+        confirmOrder.setTrainCode(trainCode);
+        confirmOrder.setStart(start);
+        confirmOrder.setEnd(end);
+        confirmOrder.setDailyTrainTicketId(req.getDailyTrainTicketId());
+        confirmOrder.setStatus(ConfirmOrderStatusEnum.INIT.getCode());
+        confirmOrder.setTickets(JSON.toJSONString(req.getTickets()));
+
+        confirmOrderMapper.insert(confirmOrder);
+
+        //查出余票记录，需要得到真实的库存
+        DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(date, trainCode, start, end);
+        LOG.info("查出余票记录:{}",dailyTrainTicket);
+        //扣减余票数量，并判断余票是否足够
+
+        //选座
+            // 一个车厢一个车厢的获取座位数据
+
+            //挑选符合条件的座位，如果这个车厢不满足，则进入下个车厢（多个选座应该在同一个车厢）
+
+        //选中座位后事务处理：
+            // 座位表修改售卖情况sell
+            //余票详情表修改余票
+            //为会员增加购票记录
+            //更新确认订单为成功
     }
 }
