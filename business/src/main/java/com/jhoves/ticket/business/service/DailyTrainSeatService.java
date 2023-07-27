@@ -34,13 +34,14 @@ public class DailyTrainSeatService {
     private static final Logger LOG = LoggerFactory.getLogger(DailyTrainSeatService.class);
 
     @Resource
-    private DailyTrainSeatMapper dailyTrainSeatMapper;
-
-    @Resource
     private TrainSeatService trainSeatService;
 
     @Resource
     private TrainStationService trainStationService;
+
+    @Resource
+    private DailyTrainSeatMapper dailyTrainSeatMapper;
+
 
     //这个接口根据id是否为空来辨别是保存还是更新
     public void save(DailyTrainSeatSaveReq req) {
@@ -140,5 +141,15 @@ public class DailyTrainSeatService {
             return -1;
         }
         return (int) l;
+    }
+
+    public List<DailyTrainSeat> selectByCarriage(Date date, String trainCode, Integer carriageIndex) {
+        DailyTrainSeatExample example = new DailyTrainSeatExample();
+        example.setOrderByClause("carriage_seat_index asc");
+        example.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode)
+                .andCarriageIndexEqualTo(carriageIndex);
+        return dailyTrainSeatMapper.selectByExample(example);
     }
 }
