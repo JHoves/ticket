@@ -1,11 +1,8 @@
 package com.jhoves.ticket.business.domain;
 
-import org.springframework.core.serializer.Serializer;
-
-import java.io.Serializable;
 import java.util.Date;
 
-public class Train implements Serializable {
+public class Train{
     private Long id;
 
     private String code;
