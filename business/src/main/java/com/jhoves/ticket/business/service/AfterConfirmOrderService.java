@@ -1,7 +1,9 @@
 package com.jhoves.ticket.business.service;
 
 import com.jhoves.ticket.business.domain.*;
+import com.jhoves.ticket.business.enums.ConfirmOrderStatusEnum;
 import com.jhoves.ticket.business.feign.MemberFeign;
+import com.jhoves.ticket.business.mapper.ConfirmOrderMapper;
 import com.jhoves.ticket.business.mapper.DailyTrainSeatMapper;
 import com.jhoves.ticket.business.mapper.cust.DailyTrainTicketMapperCust;
 import com.jhoves.ticket.business.req.ConfirmOrderTicketReq;
@@ -33,6 +35,9 @@ public class AfterConfirmOrderService {
     @Resource
     private MemberFeign memberFeign;
 
+    @Resource
+    private ConfirmOrderMapper confirmOrderMapper;
+
     /**
      *选中座位后事务处理：
      * 座位表修改售卖情况sell
@@ -41,7 +46,7 @@ public class AfterConfirmOrderService {
      *  更新确认订单为成功
      */
     @Transactional
-    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets) {
+    public void afterDoConfirm(DailyTrainTicket dailyTrainTicket, List<DailyTrainSeat> finalSeatList, List<ConfirmOrderTicketReq> tickets,ConfirmOrder confirmOrder) {
         //座位表修改售卖情况sell
         for (int j = 0;j < finalSeatList.size(); j++) {
             DailyTrainSeat dailyTrainSeat = finalSeatList.get(j);
@@ -117,6 +122,13 @@ public class AfterConfirmOrderService {
             CommonResp<Object> commonReq = memberFeign.save(memberTicketReq);
             LOG.info("调用member接口，返回{}",commonReq);
 
+
+            //更新订单状态为成功
+            ConfirmOrder confirmOrderForUpdate = new ConfirmOrder();
+            confirmOrderForUpdate.setId(confirmOrder.getId());
+            confirmOrderForUpdate.setUpdateTime(new Date());
+            confirmOrderForUpdate.setStatus(ConfirmOrderStatusEnum.SUCCESS.getCode());
+            confirmOrderMapper.updateByPrimaryKeySelective(confirmOrderForUpdate);
         }
     }
 }
