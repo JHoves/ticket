@@ -5,13 +5,13 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jhoves.ticket.common.req.MemberTicketReq;
 import com.jhoves.ticket.common.resp.PageResp;
 import com.jhoves.ticket.common.util.SnowUtil;
 import com.jhoves.ticket.member.domain.Ticket;
 import com.jhoves.ticket.member.domain.TicketExample;
 import com.jhoves.ticket.member.mapper.TicketMapper;
 import com.jhoves.ticket.member.req.TicketQueryReq;
-import com.jhoves.ticket.member.req.TicketSaveReq;
 import com.jhoves.ticket.member.resp.TicketQueryResp;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -29,27 +29,26 @@ public class TicketService {
     @Resource
     private TicketMapper ticketMapper;
 
-    //这个接口根据id是否为空来辨别是保存还是更新
-    public void save(TicketSaveReq req) {
+    /**
+     * 会员购买车票后新增保存
+     * @param req
+     */
+    public void save(MemberTicketReq req) {
         DateTime now = DateTime.now();
         Ticket ticket = BeanUtil.copyProperties(req, Ticket.class);
-        //如果id是空，则是保存
-        if (ObjectUtil.isNull(ticket.getId())) {
-            ticket.setId(SnowUtil.getSnowflakeNextId());
-            ticket.setCreateTime(now);
-            ticket.setUpdateTime(now);
-            ticketMapper.insert(ticket);
-            //如果不为空，则更新
-        } else {
-            ticket.setUpdateTime(now);
-            ticketMapper.updateByPrimaryKey(ticket);
-        }
+        ticket.setId(SnowUtil.getSnowflakeNextId());
+        ticket.setCreateTime(now);
+        ticket.setUpdateTime(now);
+        ticketMapper.insert(ticket);
     }
 
     public PageResp<TicketQueryResp> queryList(TicketQueryReq req) {
         TicketExample ticketExample = new TicketExample();
         ticketExample.setOrderByClause("id desc");
         TicketExample.Criteria criteria = ticketExample.createCriteria();
+        if(ObjectUtil.isNotNull(req.getMemberId())){
+            criteria.andMemberIdEqualTo(req.getMemberId());
+        }
 
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
