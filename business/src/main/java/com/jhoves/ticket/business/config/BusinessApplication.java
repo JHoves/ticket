@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -13,6 +14,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @ComponentScan("com.jhoves")
 @MapperScan("com.jhoves.ticket.*.mapper")
 @EnableFeignClients("com.jhoves.ticket.business.feign")
+@EnableCaching
 public class BusinessApplication {
     //增加日志
     private static final Logger LOG = LoggerFactory.getLogger(BusinessApplication.class);
