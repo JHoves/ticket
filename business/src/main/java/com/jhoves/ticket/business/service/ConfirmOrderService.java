@@ -100,7 +100,7 @@ public class ConfirmOrderService {
         confirmOrderMapper.deleteByPrimaryKey(id);
     }
 
-    public void doConfirm(ConfirmOrderDoReq req) {
+    public synchronized void doConfirm(ConfirmOrderDoReq req) {
         //省略业务数据校验，如：车次是否存在，余票是否存在，车次是否在有效期内，tickets条数>0，同乘客同车次是否已买过
 
         //保存确认订单表，状态初始
@@ -125,6 +125,13 @@ public class ConfirmOrderService {
 
         confirmOrderMapper.insert(confirmOrder);
 
+        /**
+         * 会出现超卖的地方，超卖原因：
+         * 假设库存为1，多个线程同时读到余票记录，都认为库存为1，都往后去选座购票，最终导致超卖
+         * 测试数据：500个线程什么都没加时执行4秒
+         * 解决方案：加锁
+         * 1、加synchronized关键字：吞吐量/TPS变低，6s（单机的情况就可以，但是多节点的话还是会出现超卖问题）
+         */
         //查出余票记录，需要得到真实的库存
         DailyTrainTicket dailyTrainTicket = dailyTrainTicketService.selectByUnique(date, trainCode, start, end);
         LOG.info("查出余票记录:{}",dailyTrainTicket);

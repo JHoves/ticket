@@ -1,0 +1,23 @@
+POST http://localhost:8000/business/confirm-order/do
+Content-Type: application/json
+token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2OTA5ODQxNDEsIm1vYmlsZSI6IjEzNTAwMDAwMDAwIiwiaWQiOjE2NDYxODQ0MDM1MjI2ODY5NzYsImV4cCI6MTY5MTA3MDU0MSwiaWF0IjoxNjkwOTg0MTQxfQ.Z3gzvIJ48hVQ88fklwgXT_J3UXd2KhKHejd9GfQFYNU
+
+{
+  "dailyTrainTicketId":1684559601221111808,
+  "date":1690905600000,
+  "end":"汕头",
+  "start":"惠州",
+  "tickets": [{
+    "passengerId":1685107400945831936,
+    "passengerIdCard":"443355600607892014",
+    "passengerName":"小蓝",
+    "passengerType":"1",
+    "seatTypeCode":"2"
+  }],
+  "trainCode":"G10086"
+}
+###
+
+GET http://localhost:8000/business/confirm-order/query-line-count/1662452972099080192
+Content-Type: application/json
+token: {{token}}
