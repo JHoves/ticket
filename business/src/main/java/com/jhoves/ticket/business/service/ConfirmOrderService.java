@@ -27,7 +27,6 @@ import com.jhoves.ticket.business.req.ConfirmOrderQueryReq;
 import com.jhoves.ticket.business.resp.ConfirmOrderQueryResp;
 import jakarta.annotation.Resource;
 
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

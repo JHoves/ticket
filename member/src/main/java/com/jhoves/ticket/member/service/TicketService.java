@@ -13,7 +13,6 @@ import com.jhoves.ticket.member.domain.TicketExample;
 import com.jhoves.ticket.member.mapper.TicketMapper;
 import com.jhoves.ticket.member.req.TicketQueryReq;
 import com.jhoves.ticket.member.resp.TicketQueryResp;
-import io.seata.core.context.RootContext;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class TicketService {
      * @param req
      */
     public void save(MemberTicketReq req) throws Exception {
-        LOG.info("seata全局事务ID：{}", RootContext.getXID());
+        //LOG.info("seata全局事务ID：{}", RootContext.getXID());
         DateTime now = DateTime.now();
         Ticket ticket = BeanUtil.copyProperties(req, Ticket.class);
         ticket.setId(SnowUtil.getSnowflakeNextId());
