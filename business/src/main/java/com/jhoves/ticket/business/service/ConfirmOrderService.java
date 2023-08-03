@@ -258,7 +258,8 @@ public class ConfirmOrderService {
         //} catch (InterruptedException e) {
         //    LOG.error("购票异常",e);
         }finally {
-            //LOG.info("购票流程结束，释放锁！");
+            LOG.info("购票流程结束，释放锁！lockKey：{}",lockKey);
+            redisTemplate.delete(lockKey);
             //if(null != lock && lock.isHeldByCurrentThread()){
             //    lock.unlock();
             //}
