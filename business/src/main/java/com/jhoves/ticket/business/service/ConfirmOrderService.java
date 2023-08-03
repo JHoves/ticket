@@ -27,8 +27,7 @@ import com.jhoves.ticket.business.req.ConfirmOrderQueryReq;
 import com.jhoves.ticket.business.resp.ConfirmOrderQueryResp;
 import jakarta.annotation.Resource;
 
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +62,11 @@ public class ConfirmOrderService {
     private AfterConfirmOrderService afterConfirmOrderService;
 
 
-//    private StringRedisTemplate redisTemplate;
     @Autowired
-    private RedissonClient redissonClient;
+    private StringRedisTemplate redisTemplate;
+
+//    @Autowired
+//    private RedissonClient redissonClient;
 
    //个接口根据id是否为空来辨别是保存还是更新
     public void save(ConfirmOrderDoReq req) {
@@ -114,34 +115,34 @@ public class ConfirmOrderService {
     public void doConfirm(ConfirmOrderDoReq req) {
         //分布式锁解决超卖问题
         String lockKey = DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
-//        Boolean setIfAbsent = redisTemplate.opsForValue().setIfAbsent(key, key, 5, TimeUnit.SECONDS);
-//        if(setIfAbsent){
-//            LOG.info("恭喜，抢到锁了！");
-//        }else{
-//            //只是没抢到锁，并不知道票抢完了没，所以提示稍后再试
-//            LOG.info("很遗憾，没抢到锁！");
-//            throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
-//        }
+        Boolean setIfAbsent = redisTemplate.opsForValue().setIfAbsent(lockKey, lockKey, 5, TimeUnit.SECONDS);
+        if(setIfAbsent){
+            LOG.info("恭喜，抢到锁了！");
+        }else{
+            //只是没抢到锁，并不知道票抢完了没，所以提示稍后再试
+            LOG.info("很遗憾，没抢到锁！");
+            throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
+        }
 
         //利用redisson看门狗来写
-        RLock lock = null;
+        //RLock lock = null;
         try {
-            //使用redisson，自带看门狗
-            lock = redissonClient.getLock(lockKey);
-            /**
-             * waitTime - the maximum time to acquire the lock 等待获取锁时间（最大尝试获得锁的时间），超时返回false
-             * leaseTime - lease time 锁时长，即n秒后自动释放锁
-             * time unit - time unit 时间单位
-             */
-            // boolean tryLock = lock.tryLock(0, 10, TimeUnit.SECONDS); //不带看门狗
-            boolean tryLock = lock.tryLock(0, TimeUnit.SECONDS); //带看门狗
-            if(tryLock) {
-                LOG.info("恭喜，抢到锁了！");
-            }else{
-                //只是没抢到锁，并不知道票抢完了没，所以提示稍后再试
-                LOG.info("很遗憾，没抢到锁！");
-                throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
-            }
+//            //使用redisson，自带看门狗
+//            lock = redissonClient.getLock(lockKey);
+//            /**
+//             * waitTime - the maximum time to acquire the lock 等待获取锁时间（最大尝试获得锁的时间），超时返回false
+//             * leaseTime - lease time 锁时长，即n秒后自动释放锁
+//             * time unit - time unit 时间单位
+//             */
+//            // boolean tryLock = lock.tryLock(0, 10, TimeUnit.SECONDS); //不带看门狗
+//            boolean tryLock = lock.tryLock(0, TimeUnit.SECONDS); //带看门狗
+//            if(tryLock) {
+//                LOG.info("恭喜，抢到锁了！");
+//            }else{
+//                //只是没抢到锁，并不知道票抢完了没，所以提示稍后再试
+//                LOG.info("很遗憾，没抢到锁！");
+//                throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_LOCK_FAIL);
+//            }
 
             //保存确认订单表，状态初始
             DateTime now = DateTime.now();
@@ -255,13 +256,13 @@ public class ConfirmOrderService {
                 LOG.error("保存购票信息失败",e);
                 throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_EXCEPTION);
             }
-        } catch (InterruptedException e) {
-            LOG.error("购票异常",e);
+        //} catch (InterruptedException e) {
+        //    LOG.error("购票异常",e);
         }finally {
-            LOG.info("购票流程结束，释放锁！");
-            if(null != lock && lock.isHeldByCurrentThread()){
-                lock.unlock();
-            }
+            //LOG.info("购票流程结束，释放锁！");
+            //if(null != lock && lock.isHeldByCurrentThread()){
+            //    lock.unlock();
+            //}
         }
     }
 
