@@ -52,6 +52,12 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
 
+        <!--  sentinel + nacos  -->
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
+        </dependency>
+
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.redisson</groupId>-->
