@@ -15,14 +15,14 @@ import java.io.IOException;
 import java.util.*;
 
 public class ServerGenerator {
-    static boolean readOnly = true;
+    static boolean readOnly = false;
     static String vuePath = "admin/src/views/main/";
     static String serverPath = "[module]/src/main/java/com/jhoves/ticket/[module]/";
     static String pomPath = "generator/pom.xml";
     static String module = "";
-    static {
-         new File(serverPath).mkdirs();
-    }
+//    static {
+//         new File(serverPath).mkdirs();
+//    }
 
     public static void main(String[] args) throws Exception {
         // 获取mybatis-generator
@@ -53,12 +53,12 @@ public class ServerGenerator {
         DbUtil.user = userId.getText();
         DbUtil.password = password.getText();
 
-        // 示例：表名 jiawa_test
-        // Domain = JiawaTest
+        // 示例：表名 jhoves_test
+        // Domain = JhovesTest
         String Domain = domainObjectName.getText();
-        // domain = jiawaTest
+        // domain = jhovesTest
         String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
-        // do_main = jiawa-test
+        // do_main = jhoves-test
         String do_main = tableName.getText().replaceAll("_", "-");
         // 表中文名
         String tableNameCn = DbUtil.getTableComment(tableName.getText());
