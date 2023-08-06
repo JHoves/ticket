@@ -58,6 +58,12 @@
             <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
 
+        <!--  图形验证码  -->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
+
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.redisson</groupId>-->

@@ -51,7 +51,7 @@
     <a-modal v-model:visible="visible" title="请核对以下信息"
              style="top: 50px; width: 800px"
              ok-text="确认" cancel-text="取消"
-             @ok="handleOk">
+             @ok="showImageCodeModel">
         <div class="order-tickets">
             <a-row class="order-tickets-header" v-if="tickets.length > 0">
                 <a-col :span="3">乘客</a-col>
@@ -92,11 +92,29 @@
                 </div>
                 <div style="color: #999999">提示：您可以选择{{tickets.length}}个座位</div>
             </div>
-            <br/>
-            最终购票： {{tickets}}
-            最终选座： {{chooseSeatObj}}
+<!--            <br/>-->
+<!--            最终购票： {{tickets}}-->
+<!--            最终选座： {{chooseSeatObj}}-->
         </div>
     </a-modal>
+
+    <!--  验证码  -->
+    <a-modal v-model:visible="imageCodeModalVisible" :title="null" :footer="null" :closable="false"
+             style="top: 50px; width: 400px">
+        <p style="text-align: center; font-weight: bold; font-size: 18px">
+            使用服务端验证码削弱瞬时高峰<br/>
+            防止机器人刷票
+        </p>
+        <p>
+            <a-input v-model:value="imageCode" placeholder="图片验证码">
+                <template #suffix>
+                    <img v-show="!!imageCodeSrc" :src="imageCodeSrc" alt="验证码" v-on:click="loadImageCode()"/>
+                </template>
+            </a-input>
+        </p>
+        <a-button type="danger" block @click="handleOk">输入验证码后开始购票</a-button>
+    </a-modal>
+
 </template>
 
 <script>
@@ -280,6 +298,11 @@
 
 
             const handleOk = () => {
+                if (Tool.isEmpty(imageCode.value)) {
+                    notification.error({description: '验证码不能为空'});
+                    return;
+                }
+
                 console.log("选好的座位：",chooseSeatObj.value);
 
                 //设置每张票的座位
@@ -311,9 +334,9 @@
                     trainCode: dailyTrainTicket.trainCode,
                     start: dailyTrainTicket.start,
                     end: dailyTrainTicket.end,
-                    tickets: tickets.value
-                    // imageCodeToken: imageCodeToken.value,
-                    // imageCode: imageCode.value,
+                    tickets: tickets.value,
+                    imageCodeToken: imageCodeToken.value,
+                    imageCode: imageCode.value,
                     // lineNumber: lineNumber.value
                 }).then((response) => {
                     let data = response.data;
@@ -329,6 +352,24 @@
                     }
                 });
             }
+
+            /* ------------------- 验证码 --------------------- */
+            const imageCodeModalVisible = ref();
+            const imageCodeToken = ref();
+            const imageCodeSrc = ref();
+            const imageCode = ref();
+            /**
+             * 加载图形验证码
+             */
+            const loadImageCode = () => {
+                imageCodeToken.value = Tool.uuid(8);
+                imageCodeSrc.value = process.env.VUE_APP_SERVER + '/business/kaptcha/image-code/' + imageCodeToken.value;
+            };
+
+            const showImageCodeModel = () => {
+                loadImageCode();
+                imageCodeModalVisible.value = true;
+            };
 
 
             onMounted(() => {
@@ -350,6 +391,12 @@
                 chooseSeatObj,
                 SEAT_COL_ARRAY,
                 handleOk,
+                imageCodeToken,
+                imageCodeSrc,
+                imageCode,
+                showImageCodeModel,
+                imageCodeModalVisible,
+                loadImageCode,
             };
         },
     });
