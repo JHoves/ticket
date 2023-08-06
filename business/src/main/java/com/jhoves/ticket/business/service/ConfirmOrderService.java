@@ -15,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jhoves.ticket.business.domain.*;
 import com.jhoves.ticket.business.enums.ConfirmOrderStatusEnum;
+import com.jhoves.ticket.business.enums.RedisKeyPreEnum;
 import com.jhoves.ticket.business.enums.SeatColEnum;
 import com.jhoves.ticket.business.enums.SeatTypeEnum;
 import com.jhoves.ticket.business.req.ConfirmOrderDoReq;
@@ -35,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -128,7 +128,7 @@ public class ConfirmOrderService {
          }
 
         //分布式锁解决超卖问题
-        String lockKey = DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
+        String lockKey = RedisKeyPreEnum.CONFIRM_ORDER + "-" + DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
         Boolean setIfAbsent = redisTemplate.opsForValue().setIfAbsent(lockKey, lockKey, 5, TimeUnit.SECONDS);
         if(setIfAbsent){
             LOG.info("恭喜，抢到锁了！");
